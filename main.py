@@ -2,10 +2,11 @@ from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 from flask import Flask
 from threading import Thread
+import os
 
-TOKEN = "8021813692:AAGYUHwi6YcnaCmPUXUS1WdFZJ2JNirDcro"
+TOKEN = os.getenv("TOKEN")  # security better
 
-app = Flask('')
+app = Flask(__name__)
 
 @app.route('/')
 def home():
@@ -19,10 +20,10 @@ def keep_alive():
     t.start()
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("Bot is running 24/7 🚀")
+    await update.message.reply_text("Bot is live 24/7 🚀")
 
-app_bot = ApplicationBuilder().token(TOKEN).build()
-app_bot.add_handler(CommandHandler("start", start))
+bot = ApplicationBuilder().token(TOKEN).build()
+bot.add_handler(CommandHandler("start", start))
 
 keep_alive()
-app_bot.run_polling()
+bot.run_polling()
